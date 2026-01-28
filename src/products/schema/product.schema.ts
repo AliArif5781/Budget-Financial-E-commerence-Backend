@@ -11,10 +11,10 @@ export class Product {
   name: string;
 
   @Prop({ required: true, trim: true })
-  title: string;
+  title?: string;
 
   @Prop({ required: true, trim: true })
-  description: string;
+  description?: string;
 
   @Prop({ required: true, min: 0 })
   price: number;
@@ -23,10 +23,10 @@ export class Product {
   stock: number;
 
   @Prop({ default: category.Fashion })
-  category: string;
+  category?: string;
 
   @Prop({ default: size.md, required: true })
-  size: string;
+  size?: string;
 
   @Prop()
   mediaUrl: string;

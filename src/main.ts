@@ -3,7 +3,10 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 
-console.log(process.env.CLIENT_URI);
+// console.log(process.env.CLIENT_URI);
+// npm install @google/generative-ai
+// create ai resource mean another folder for ai integration clean architecture.
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());

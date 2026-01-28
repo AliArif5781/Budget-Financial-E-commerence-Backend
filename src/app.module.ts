@@ -13,6 +13,7 @@ import { CartModule } from './cart/cart.module';
 import { PaymentsModule } from './payments/payments.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { ReportModule } from './report/report.module';
+import { AiModule } from './ai/ai.module';
 @Module({
   imports: [
     ThrottlerModule.forRoot({
@@ -33,6 +34,7 @@ import { ReportModule } from './report/report.module';
     PaymentsModule,
     InvoiceModule,
     ReportModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [

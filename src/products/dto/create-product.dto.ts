@@ -23,8 +23,6 @@ export class CreateProductDto {
 
   @IsString()
   @IsNotEmpty()
-  @MinLength(20)
-  @MaxLength(200)
   description: string;
 
   @IsNumber()
