@@ -41,6 +41,7 @@ export class InvoiceService {
         path: 'items.productId',
         select: 'name price',
       })
+      .populate('user', 'firstName')
       .lean();
   }
 
