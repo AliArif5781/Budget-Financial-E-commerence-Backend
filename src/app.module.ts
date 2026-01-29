@@ -14,6 +14,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { ReportModule } from './report/report.module';
 import { AiModule } from './ai/ai.module';
+import { CouponModule } from './coupon/coupon.module';
 @Module({
   imports: [
     ThrottlerModule.forRoot({
@@ -35,6 +36,7 @@ import { AiModule } from './ai/ai.module';
     InvoiceModule,
     ReportModule,
     AiModule,
+    CouponModule,
   ],
   controllers: [AppController],
   providers: [
