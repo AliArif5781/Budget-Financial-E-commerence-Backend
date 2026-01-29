@@ -81,6 +81,13 @@ export class ProductsController {
     return await this.productsService.getAllProducts(Number(limit), cursor);
   }
 
+  // chart data
+  @Get('getChartData')
+  @SkipThrottle()
+  async getChartData() {
+    return await this.productsService.chartData();
+  }
+
   // Popular Products
   @Get(':id')
   @SkipThrottle()

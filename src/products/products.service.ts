@@ -117,6 +117,12 @@ export class ProductsService {
     return await this.productModel.estimatedDocumentCount();
   }
 
+  // get chart data
+  async chartData() {
+    return await this.invoiceModel
+      .find({}, { total: 1, createdAt: 1, _id: 0 })
+      .lean();
+  }
   async getAllProducts(limit: number, cursor?: string) {
     const query: any = {};
 
