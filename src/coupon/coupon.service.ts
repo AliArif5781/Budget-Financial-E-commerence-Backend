@@ -9,7 +9,6 @@ import { Model } from 'mongoose';
 export class CouponService {
   constructor(@InjectModel(Coupon.name) private couponModel: Model<Coupon>) {}
   async createCoupon(createCouponDto: CreateCouponDto) {
-    // return 'This action adds a new coupon';
     return await this.couponModel.create({
       coupon: createCouponDto.coupon,
       total: 150,
@@ -17,18 +16,29 @@ export class CouponService {
   }
 
   async findCoupon(checkCouponDto: checkCouponDto) {
-    const check = await this.couponModel.findOne({
+    const checkcoupon = await this.couponModel.findOne({
       coupon: checkCouponDto.coupon,
     });
 
-    if (!check) {
+    if (!checkcoupon) {
       throw new BadRequestException('Invalid coupon');
     }
 
-    if (check.status === 'used') {
-      throw new BadRequestException('Coupon already used');
+    if (checkcoupon.status !== 'unused') {
+      throw new BadRequestException('Invalid coupon');
     }
 
-    return check;
+    // 3. Apply 5% discount
+    const discount = Number(checkCouponDto.total) * 0.05;
+    const total = Number(checkCouponDto.total) - discount;
+
+    checkcoupon.status = 'used';
+    await checkcoupon.save();
+
+    return {
+      total,
+      message: 'Coupon Applied',
+      appliedCoupon: checkCouponDto.coupon,
+    };
   }
 }

@@ -22,6 +22,7 @@ export class CouponController {
 
   @Post('check-coupon')
   findAll(@Body() checkCouponDto: checkCouponDto) {
+    console.log(checkCouponDto, typeof checkCouponDto.total);
     return this.couponService.findCoupon(checkCouponDto);
   }
 

@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
@@ -19,5 +20,10 @@ export class CreateCouponDto {
 }
 
 export class checkCouponDto {
+  @IsString()
   coupon: string;
+
+  @IsNumber({}, { message: 'total must be a number' })
+  @Type(() => Number)
+  total: number;
 }
