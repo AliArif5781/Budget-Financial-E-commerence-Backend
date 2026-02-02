@@ -15,7 +15,7 @@ export class BudgetService {
         .findOneAndUpdate(
           { user: userId }, // ✅ correct filter
           {
-            budgetAmount: createBudgetDto.budgetAmount,
+            budgetAmount: createBudgetDto.budgetAmount.toFixed(2),
             budgetCurrency: createBudgetDto.budgetCurrency,
             user: userId,
           },
@@ -26,6 +26,7 @@ export class BudgetService {
         )
         .populate('user');
 
+      console.log(budget);
       return budget;
     } catch (error) {
       throw new Error('Failed To set Budget, Try Again');
@@ -35,15 +36,3 @@ export class BudgetService {
     return await this.budgetModel.findOne({ user: userId });
   }
 }
-
-// findOne(id: number) {
-//   return `This action returns a #${id} budget`;
-// }
-
-// update(id: number, updateBudgetDto: UpdateBudgetDto) {
-//   return `This action updates a #${id} budget`;
-// }
-
-// remove(id: number) {
-//   return `This action removes a #${id} budget`;
-// }

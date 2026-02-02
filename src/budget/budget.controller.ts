@@ -39,19 +39,4 @@ export class BudgetController {
     const userId = req.user.sub;
     return this.budgetService.getUserBudget(userId);
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.budgetService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateBudgetDto: UpdateBudgetDto) {
-  //   return this.budgetService.update(+id, updateBudgetDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.budgetService.remove(+id);
-  // }
 }
