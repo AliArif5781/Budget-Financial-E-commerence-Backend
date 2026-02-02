@@ -7,6 +7,7 @@ import { Model, Types } from 'mongoose';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { Product } from 'src/products/schema/product.schema';
 import { Invoice } from 'src/invoice/schema/invoice.schema';
+import { Cart } from 'src/cart/schema/cart.schema';
 
 @Injectable()
 // Find the product whose ID matches the one in the cart.
@@ -16,17 +17,21 @@ export class PaymentsService {
     @InjectModel(Payment.name) private paymentModel: Model<Payment>,
     @InjectModel(Product.name) private productModel: Model<Product>,
     @InjectModel(Invoice.name) private invoiceModel: Model<Invoice>,
+    @InjectModel(Cart.name) private cartModel: Model<Cart>,
   ) {}
   // store user payment
+
   async createPaymentAndInvoice(dto: CreatePaymentDto, userId: string) {
-    // 1. Validate stock (your existing logic)
+    const orderId = new Types.ObjectId().toHexString();
+
+    // 1. Validate stock
     for (const item of dto.items) {
       const product = await this.productModel.findById(item.productId);
       if (!product) throw new Error('Product not found');
       if (product.stock < item.quantity) throw new Error('Insufficient stock');
     }
 
-    // 2. Update stock (existing logic)
+    // 2. Update stock
     for (const item of dto.items) {
       await this.productModel.findOneAndUpdate(
         { _id: item.productId, stock: { $gte: item.quantity } },
@@ -35,10 +40,14 @@ export class PaymentsService {
       );
     }
 
-    // 3. Create payment (SUCCESS)
+    // 3. Create payment
     const payment = await this.paymentModel.findOneAndUpdate(
       { token: dto.token },
       {
+        $set: {
+          orderId,
+          status: 'SUCCESS',
+        },
         $setOnInsert: {
           amount: dto.amount,
           currency: dto.currency,
@@ -48,16 +57,18 @@ export class PaymentsService {
           items: dto.items,
           token: dto.token,
           user: userId,
-          // status: 'SUCCESS',
         },
       },
       { upsert: true, new: true },
     );
 
-    // 4. Create invoice (idempotent)
+    // 4. Create invoice
     const invoice = await this.invoiceModel.findOneAndUpdate(
       { token: dto.token },
       {
+        $set: {
+          orderId,
+        },
         $setOnInsert: {
           token: dto.token,
           user: userId,
@@ -73,15 +84,18 @@ export class PaymentsService {
       { upsert: true, new: true },
     );
 
-    return { payment, invoice };
+    // 5. Clear cart
+    await this.cartModel.updateOne({ userId }, { $set: { items: [] } });
+
+    console.log(orderId, 'order-ID');
+    // 6. Return orderId to frontend
+    return { payment, invoice, orderId };
   }
 
   // get user payment details
-  async getUserPaymentDetails(userId: string) {
+  async getUserPaymentDetails(userId: string, orderId: string) {
     return await this.paymentModel
-      .findOne({
-        user: userId,
-      })
+      .findOne({ user: userId, orderId })
       .populate('user', 'firstName lastName email address phone')
       .populate({
         path: 'items.productId',

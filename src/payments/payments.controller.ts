@@ -56,6 +56,9 @@ export class PaymentsController {
         },
       );
 
+      const orderId = response.data.orderId;
+      console.log(orderId, 'ORDER-ID');
+
       return {
         payment: response.data,
         message: 'Payment Accepted Successfully.',
@@ -86,12 +89,12 @@ export class PaymentsController {
   }
 
   // get user payment details
-  @Get('getUserPaymentDetails')
+  @Get('getUserPaymentDetails/:orderId')
   @UseGuards(AuthGuard)
   @SkipThrottle()
-  async userPaymentDetails(@Req() req) {
+  async userPaymentDetails(@Req() req, @Param('orderId') orderId: string) {
     const userId = req.user.sub;
-    return await this.paymentsService.getUserPaymentDetails(userId);
+    return await this.paymentsService.getUserPaymentDetails(userId, orderId);
   }
 
   @Get('getAllRevenue')

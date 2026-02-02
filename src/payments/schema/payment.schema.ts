@@ -31,6 +31,9 @@ export class Payment {
   })
   items: CartItem[];
 
+  @Prop()
+  orderId: string;
+
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
   user: mongoose.Types.ObjectId;
 }
