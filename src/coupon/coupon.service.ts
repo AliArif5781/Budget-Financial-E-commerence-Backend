@@ -11,7 +11,6 @@ export class CouponService {
   async createCoupon(createCouponDto: CreateCouponDto) {
     return await this.couponModel.create({
       coupon: createCouponDto.coupon,
-      total: 150,
     });
   }
 
