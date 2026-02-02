@@ -27,6 +27,9 @@ export class Invoice extends Document {
   @Prop({ type: [InvoiceItemSchema], required: true })
   items: InvoiceItem[];
 
+  @Prop()
+  orderId: string;
+
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
   user: mongoose.Types.ObjectId;
 }
