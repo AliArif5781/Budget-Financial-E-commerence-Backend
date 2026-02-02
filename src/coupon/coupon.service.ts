@@ -39,6 +39,7 @@ export class CouponService {
       total,
       message: 'Coupon Applied',
       appliedCoupon: checkCouponDto.coupon,
+      applied: true,
     };
   }
 }
