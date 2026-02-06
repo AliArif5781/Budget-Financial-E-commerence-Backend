@@ -39,10 +39,11 @@ export class InvoiceController {
   }
 
   @Get('getAllInvoice')
-  @UseGuards(RolesGuard)
+  // @UseGuards(AuthGuard,)
   // @Roles(Role.Admin)
   @SkipThrottle()
   getAllInvoice() {
+    // const adminId = req.user.sub;
     return this.invoiceService.findAll();
   }
 

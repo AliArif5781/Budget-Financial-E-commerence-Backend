@@ -28,7 +28,7 @@ export class PaymentsController {
   @SkipThrottle()
   async createToken(@Body() body: { amount: number }) {
     return {
-      token: 'sanobx_dummy_token_for_handling_payment_frontend_and_backend',
+      token: process.env.PAYMENT_TOKEN,
     };
   }
 

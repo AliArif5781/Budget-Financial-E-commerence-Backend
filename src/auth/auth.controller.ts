@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 import { LoginDto, signupDto } from './dto/auth.dto';
 import { UserService } from 'src/user/user.service';
 import type { Response } from 'express';
-import { SkipThrottle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
@@ -23,8 +23,8 @@ export class AuthController {
   ) {}
 
   @Post('signup')
-  // @Throttle({ default: { limit: 3, ttl: 60000 } })
-  @SkipThrottle()
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
+  // @SkipThrottle()
   async create(
     @Body() signupDto: signupDto,
     @Res({ passthrough: true }) res: Response,
@@ -36,12 +36,11 @@ export class AuthController {
     });
 
     return { message: 'Signup successfully', accessToken };
-    // return this.authService.create(signupDto);
   }
 
   @Post('login')
-  // @Throttle({ default: { limit: 3, ttl: 60000 } })
-  @SkipThrottle()
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
+  // @SkipThrottle()
   async login(
     @Body() LoginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
@@ -50,7 +49,6 @@ export class AuthController {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: false, // true in prod
-      // sameSite: 'lax',
     });
 
     return { accessToken, message: 'Logged in successfully' };

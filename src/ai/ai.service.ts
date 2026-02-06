@@ -41,7 +41,7 @@ Choose ONLY ONE category from the list below:
 Choose ONLY ONE size from the list below:
 [xs, sm, md, lg, xl, xxl, standard]
 
-Generate SEO-friendly content.
+Generate SEO-friendly content.Using the product name as the primary keyword.Ensure the first 2 sentences include the main keyword and the products core benefit.
 Return ONLY valid JSON in this format:
 
 {

@@ -94,7 +94,7 @@ export class PaymentsService {
 
   // get user payment details
   async getUserPaymentDetails(userId: string, orderId: string) {
-    return await this.paymentModel
+    const data = await this.paymentModel
       .findOne({ user: userId, orderId })
       .populate('user', 'firstName lastName email address phone')
       .populate({
@@ -102,6 +102,8 @@ export class PaymentsService {
         model: 'Product',
         select: 'name price',
       });
+    // console.log(data, 'checked data');
+    return data;
   }
 
   // get revenue price data
