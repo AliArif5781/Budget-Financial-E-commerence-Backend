@@ -100,7 +100,7 @@ export class ProductsService {
   }
 
   async findAllProductsData() {
-    const products = await this.productModel.find();
+    const products = await this.productModel.find().lean();
 
     return {
       products,
