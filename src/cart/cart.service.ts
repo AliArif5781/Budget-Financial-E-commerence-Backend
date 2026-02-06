@@ -101,7 +101,6 @@ export class CartService {
         throw new NotFoundException('Cart not found');
       }
 
-      
       const flat = (updated.items ?? [])
         .filter((i) => i.productId)
         .map((i: any) => ({

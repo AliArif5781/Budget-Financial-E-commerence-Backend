@@ -88,6 +88,13 @@ export class ProductsController {
     return await this.productsService.chartData();
   }
 
+  // delete items
+
+  @Delete('deleteProduct/:id')
+  async deleteProduct(@Param('id') id: string) {
+    return this.productsService.deleteProduct(id);
+  }
+
   // Popular Products
   @Get(':id')
   @SkipThrottle()

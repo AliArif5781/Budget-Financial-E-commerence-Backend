@@ -1,9 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './schema/product.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { getPopularProductsDto } from './types/type';
 import { User } from 'src/user/schema/user.schema';
 import { Invoice } from 'src/invoice/schema/invoice.schema';
@@ -106,6 +110,22 @@ export class ProductsService {
       products,
     };
   }
+  async deleteProduct(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid product id');
+    }
+
+    const deleted = await this.productModel.findByIdAndDelete(id);
+
+    if (!deleted) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return {
+      message: 'Product deleted successfully',
+      id: deleted.id.toString(),
+    };
+  }
 
   async findOne(id: string) {
     const product = await this.productModel.findById(id).lean();
@@ -115,6 +135,21 @@ export class ProductsService {
 
   async getAllProductCount() {
     return await this.productModel.estimatedDocumentCount();
+  }
+
+  // check
+  async find(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid product id');
+    }
+
+    const product = await this.productModel.findById(id);
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product;
   }
 
   // get chart data
